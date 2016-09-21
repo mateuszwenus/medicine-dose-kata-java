@@ -33,5 +33,8 @@ public class DoseController {
     	if (healthMonitor.getSystolicBloodPressure() < MIN_PRESSURE_FOR_ONE_DOSE) {
     		medicinePump.dose(Medicine.PRESSURE_RAISING_MEDICINE);
     	}
+    	if (healthMonitor.getSystolicBloodPressure() > 150) {
+    		medicinePump.dose(Medicine.PRESSURE_LOWERING_MEDICINE);
+    	}
     }
 }
