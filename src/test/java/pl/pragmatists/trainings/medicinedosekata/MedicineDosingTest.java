@@ -85,7 +85,7 @@ public class MedicineDosingTest {
 	@Test
 	public void should_dose_two_raising_for_very_low_pressure() {
 		// given
-		when(healthMonitor.getSystolicBloodPressure()).thenReturn(59);
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MIN_PRESSURE_FOR_ONE_DOSE - 1);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		// when
 		doseController.checkHealthAndApplyMedicine();
