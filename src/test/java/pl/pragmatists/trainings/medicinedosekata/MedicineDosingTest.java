@@ -2,6 +2,7 @@ package pl.pragmatists.trainings.medicinedosekata;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -79,5 +80,16 @@ public class MedicineDosingTest {
 		// then
 		verify(medicinePump, never()).dose(Medicine.PRESSURE_LOWERING_MEDICINE);
 		verify(medicinePump, never()).dose(Medicine.PRESSURE_RAISING_MEDICINE);
+	}
+
+	@Test
+	public void should_dose_two_raising_for_very_low_pressure() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(59);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		verify(medicinePump, times(2)).dose(Medicine.PRESSURE_RAISING_MEDICINE);
 	}
 }
