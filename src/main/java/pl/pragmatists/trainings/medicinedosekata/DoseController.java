@@ -7,7 +7,9 @@ import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
 public class DoseController {
 
     public DoseController(HealthMonitor healthMonitor, MedicinePump medicinePump, AlertService alertService) {
-
+    	if (healthMonitor == null) {
+    		throw new NullPointerException("healthMonitor must not be null");
+    	}
     }
 
     public void checkHealthAndApplyMedicine() {
