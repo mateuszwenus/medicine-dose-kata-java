@@ -10,6 +10,9 @@ public class DoseController {
     	if (healthMonitor == null) {
     		throw new NullPointerException("healthMonitor must not be null");
     	}
+    	if (medicinePump == null) {
+    		throw new NullPointerException("medicinePump must not be null");
+    	}
     }
 
     public void checkHealthAndApplyMedicine() {
