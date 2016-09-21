@@ -1,6 +1,7 @@
 package pl.pragmatists.trainings.medicinedosekata;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import pl.pragmatists.trainings.medicinedosekata.dependencies.AlertService;
+import pl.pragmatists.trainings.medicinedosekata.dependencies.DoseUnsuccessfulException;
 import pl.pragmatists.trainings.medicinedosekata.dependencies.HealthMonitor;
 import pl.pragmatists.trainings.medicinedosekata.dependencies.Medicine;
 import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
@@ -102,5 +104,17 @@ public class MedicineDosingTest {
 		doseController.checkHealthAndApplyMedicine();
 		// then
 		verify(medicinePump).dose(Medicine.PRESSURE_LOWERING_MEDICINE);
+	}
+
+	@Test
+	public void should_retry_dose_when_pump_does_not_work() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MAX_NORMAL_PRESSURE + 1);
+		doThrow(DoseUnsuccessfulException.class).doNothing().when(medicinePump).dose(Medicine.PRESSURE_LOWERING_MEDICINE);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		verify(medicinePump, times(2)).dose(Medicine.PRESSURE_LOWERING_MEDICINE);
 	}
 }
