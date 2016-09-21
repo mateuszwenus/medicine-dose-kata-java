@@ -92,4 +92,15 @@ public class MedicineDosingTest {
 		// then
 		verify(medicinePump, times(2)).dose(Medicine.PRESSURE_RAISING_MEDICINE);
 	}
+
+	@Test
+	public void should_dose_one_lowering_for_high_pressure() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(151);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		verify(medicinePump).dose(Medicine.PRESSURE_LOWERING_MEDICINE);
+	}
 }
