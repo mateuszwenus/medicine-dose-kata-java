@@ -96,7 +96,7 @@ public class MedicineDosingTest {
 	@Test
 	public void should_dose_one_lowering_for_high_pressure() {
 		// given
-		when(healthMonitor.getSystolicBloodPressure()).thenReturn(151);
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MAX_NORMAL_PRESSURE + 1);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		// when
 		doseController.checkHealthAndApplyMedicine();
