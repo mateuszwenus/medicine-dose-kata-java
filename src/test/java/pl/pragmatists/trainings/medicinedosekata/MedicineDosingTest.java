@@ -1,7 +1,6 @@
 package pl.pragmatists.trainings.medicinedosekata;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +20,9 @@ public class MedicineDosingTest {
 	private MedicinePump medicinePump;
 	@Mock
 	private AlertService alertService;
-	
-    @Test
-    public void DoseController_should_throw_NPE_when_healthMonitor_is_null() {
+
+	@Test
+	public void DoseController_should_throw_NPE_when_healthMonitor_is_null() {
 		try {
 			// when
 			new DoseController(null, medicinePump, alertService);
@@ -31,10 +30,10 @@ public class MedicineDosingTest {
 		} catch (NullPointerException expected) {
 			// then
 		}
-    }
-    
-    @Test
-    public void DoseController_should_throw_NPE_when_medicinePump_is_null() {
+	}
+
+	@Test
+	public void DoseController_should_throw_NPE_when_medicinePump_is_null() {
 		try {
 			// when
 			new DoseController(healthMonitor, null, alertService);
@@ -42,10 +41,10 @@ public class MedicineDosingTest {
 		} catch (NullPointerException expected) {
 			// then
 		}
-    }
-    
-    @Test
-    public void DoseController_should_throw_NPE_when_alertService_is_null() {
+	}
+
+	@Test
+	public void DoseController_should_throw_NPE_when_alertService_is_null() {
 		try {
 			// when
 			new DoseController(healthMonitor, medicinePump, null);
@@ -53,6 +52,6 @@ public class MedicineDosingTest {
 		} catch (NullPointerException expected) {
 			// then
 		}
-    }
+	}
 
 }
