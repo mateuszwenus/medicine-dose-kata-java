@@ -7,11 +7,13 @@ import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
 public class DoseController {
 
     public DoseController(HealthMonitor healthMonitor, MedicinePump medicinePump, AlertService alertService) {
-    	if (healthMonitor == null) {
-    		throw new NullPointerException("healthMonitor must not be null");
-    	}
-    	if (medicinePump == null) {
-    		throw new NullPointerException("medicinePump must not be null");
+    	checkNotNull(healthMonitor, "healthMonitor");
+    	checkNotNull(medicinePump, "medicinePump");
+    }
+    
+    private void checkNotNull(Object obj, String variableName) {
+    	if (obj == null) {
+    		throw new NullPointerException(variableName + " must not be null");
     	}
     }
 
