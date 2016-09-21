@@ -6,6 +6,8 @@ import pl.pragmatists.trainings.medicinedosekata.dependencies.Medicine;
 import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
 
 public class DoseController {
+	
+	public static final int MIN_NORMAL_PRESSURE = 90;
 
 	private final HealthMonitor healthMonitor;
 	private final MedicinePump medicinePump;
@@ -24,7 +26,7 @@ public class DoseController {
     }
 
     public void checkHealthAndApplyMedicine() {
-    	if (healthMonitor.getSystolicBloodPressure() < 90) {
+    	if (healthMonitor.getSystolicBloodPressure() < MIN_NORMAL_PRESSURE) {
     		medicinePump.dose(Medicine.PRESSURE_RAISING_MEDICINE);
     	}
     }
