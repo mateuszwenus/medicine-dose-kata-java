@@ -38,5 +38,19 @@ public class MedicineDosingTest {
 			// then
 		}
     }
+    
+    @Test
+    public void DoseController_should_throw_NPE_when_alertService_is_null() {
+    	// given
+    	HealthMonitor healthMonitor = mock(HealthMonitor.class);
+    	MedicinePump medicinePump = mock(MedicinePump.class);
+		try {
+			// when
+			new DoseController(healthMonitor, medicinePump, null);
+			fail();
+		} catch (NullPointerException expected) {
+			// then
+		}
+    }
 
 }
