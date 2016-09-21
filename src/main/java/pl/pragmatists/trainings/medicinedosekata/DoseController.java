@@ -9,6 +9,7 @@ public class DoseController {
     public DoseController(HealthMonitor healthMonitor, MedicinePump medicinePump, AlertService alertService) {
     	checkNotNull(healthMonitor, "healthMonitor");
     	checkNotNull(medicinePump, "medicinePump");
+    	checkNotNull(alertService, "alertService");
     }
     
     private void checkNotNull(Object obj, String variableName) {
