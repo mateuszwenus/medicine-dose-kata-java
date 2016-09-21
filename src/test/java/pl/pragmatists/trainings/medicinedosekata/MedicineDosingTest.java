@@ -1,6 +1,7 @@
 package pl.pragmatists.trainings.medicinedosekata;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -56,7 +57,7 @@ public class MedicineDosingTest {
 			// then
 		}
 	}
-	
+
 	@Test
 	public void should_dose_one_raising_for_low_pressure() {
 		// given
@@ -66,5 +67,17 @@ public class MedicineDosingTest {
 		doseController.checkHealthAndApplyMedicine();
 		// then
 		verify(medicinePump).dose(Medicine.PRESSURE_RAISING_MEDICINE);
+	}
+
+	@Test
+	public void should_do_nothing_for_correct_pressure() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(90);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		verify(medicinePump, never()).dose(Medicine.PRESSURE_LOWERING_MEDICINE);
+		verify(medicinePump, never()).dose(Medicine.PRESSURE_RAISING_MEDICINE);
 	}
 }
