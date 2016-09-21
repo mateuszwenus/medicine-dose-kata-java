@@ -7,10 +7,11 @@ import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
 
 public class DoseController {
 
+	private final HealthMonitor healthMonitor;
 	private final MedicinePump medicinePump;
 	
     public DoseController(HealthMonitor healthMonitor, MedicinePump medicinePump, AlertService alertService) {
-    	checkNotNull(healthMonitor, "healthMonitor");
+    	this.healthMonitor = checkNotNull(healthMonitor, "healthMonitor");
     	this.medicinePump = checkNotNull(medicinePump, "medicinePump");
     	checkNotNull(alertService, "alertService");
     }
@@ -23,6 +24,8 @@ public class DoseController {
     }
 
     public void checkHealthAndApplyMedicine() {
-    	medicinePump.dose(Medicine.PRESSURE_RAISING_MEDICINE);
+    	if (healthMonitor.getSystolicBloodPressure() < 90) {
+    		medicinePump.dose(Medicine.PRESSURE_RAISING_MEDICINE);
+    	}
     }
 }
