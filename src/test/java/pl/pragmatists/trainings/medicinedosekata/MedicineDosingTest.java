@@ -1,6 +1,8 @@
 package pl.pragmatists.trainings.medicinedosekata;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import pl.pragmatists.trainings.medicinedosekata.dependencies.AlertService;
 import pl.pragmatists.trainings.medicinedosekata.dependencies.HealthMonitor;
+import pl.pragmatists.trainings.medicinedosekata.dependencies.Medicine;
 import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,5 +56,15 @@ public class MedicineDosingTest {
 			// then
 		}
 	}
-
+	
+	@Test
+	public void should_dose_one_raising_for_low_pressure() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(89);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		verify(medicinePump).dose(Medicine.PRESSURE_RAISING_MEDICINE);
+	}
 }
