@@ -11,6 +11,8 @@ public class DoseController {
 	public static final int MIN_NORMAL_PRESSURE = 90;
 	public static final int MAX_NORMAL_PRESSURE = 150;
 	public static final int MIN_PRESSURE_FOR_ONE_DOSE = 60;
+	
+	private static final int MAX_DOSE_ATTEMPTS = 8;
 
 	private final HealthMonitor healthMonitor;
 	private final MedicinePump medicinePump;
@@ -39,16 +41,15 @@ public class DoseController {
 	}
 
 	private void dose(Medicine medicine, int doses) {
-		try {
-			tryDose(medicine, doses);
-		} catch (DoseUnsuccessfulException e) {
-			tryDose(medicine, doses);
-		}
-	}
-
-	private void tryDose(Medicine medicine, int doses) {
-		for (int i = 0; i < doses; i++) {
-			medicinePump.dose(medicine);
+		int successfullDoses = 0;
+		int attempt = 0;
+		while (successfullDoses < doses && attempt < MAX_DOSE_ATTEMPTS) {
+			attempt++;
+			try {
+				medicinePump.dose(medicine);
+				successfullDoses++;
+			} catch (DoseUnsuccessfulException ignored) {
+			}
 		}
 	}
 }
