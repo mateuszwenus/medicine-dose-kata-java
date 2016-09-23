@@ -8,6 +8,7 @@ import pl.pragmatists.trainings.medicinedosekata.dependencies.MedicinePump;
 
 public class DoseController {
 
+	public static final int MIN_MEDICINE_INTERVAL = 31;
 	public static final int MIN_NORMAL_PRESSURE = 90;
 	public static final int MAX_NORMAL_PRESSURE = 150;
 	public static final int MIN_PRESSURE_FOR_ONE_DOSE = 60;
@@ -41,7 +42,7 @@ public class DoseController {
 	}
 
 	private void dose(Medicine medicine, int doses) {
-		if (medicinePump.getTimeSinceLastDoseInMinutes(medicine) <= 30) {
+		if (medicinePump.getTimeSinceLastDoseInMinutes(medicine) < MIN_MEDICINE_INTERVAL) {
 			return;
 		}
 		int successfullDoses = 0;
