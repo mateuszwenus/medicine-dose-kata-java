@@ -66,6 +66,7 @@ public class MedicineDosingTest {
 	public void should_dose_one_raising_for_low_pressure() {
 		// given
 		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MIN_NORMAL_PRESSURE - 1);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_RAISING_MEDICINE)).thenReturn(31);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		// when
 		doseController.checkHealthAndApplyMedicine();
@@ -89,6 +90,7 @@ public class MedicineDosingTest {
 	public void should_dose_two_raising_for_very_low_pressure() {
 		// given
 		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MIN_PRESSURE_FOR_ONE_DOSE - 1);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_RAISING_MEDICINE)).thenReturn(31);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		// when
 		doseController.checkHealthAndApplyMedicine();
@@ -100,6 +102,7 @@ public class MedicineDosingTest {
 	public void should_dose_one_lowering_for_high_pressure() {
 		// given
 		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MAX_NORMAL_PRESSURE + 1);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_LOWERING_MEDICINE)).thenReturn(31);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		// when
 		doseController.checkHealthAndApplyMedicine();
@@ -111,6 +114,7 @@ public class MedicineDosingTest {
 	public void should_retry_dose_when_pump_does_not_work() {
 		// given
 		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MAX_NORMAL_PRESSURE + 1);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_LOWERING_MEDICINE)).thenReturn(31);
 		doThrow(DoseUnsuccessfulException.class).doNothing().when(medicinePump)
 				.dose(Medicine.PRESSURE_LOWERING_MEDICINE);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
@@ -124,6 +128,7 @@ public class MedicineDosingTest {
 	public void should_not_overdose_when_pump_does_not_work() {
 		// given
 		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MIN_PRESSURE_FOR_ONE_DOSE - 1);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_RAISING_MEDICINE)).thenReturn(31);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		doNothing().doThrow(DoseUnsuccessfulException.class).doNothing().when(medicinePump).dose(Medicine.PRESSURE_RAISING_MEDICINE);
 		doseController.checkHealthAndApplyMedicine();

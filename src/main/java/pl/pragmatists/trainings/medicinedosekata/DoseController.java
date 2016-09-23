@@ -41,6 +41,9 @@ public class DoseController {
 	}
 
 	private void dose(Medicine medicine, int doses) {
+		if (medicinePump.getTimeSinceLastDoseInMinutes(medicine) <= 30) {
+			return;
+		}
 		int successfullDoses = 0;
 		int attempt = 0;
 		while (successfullDoses < doses && attempt < MAX_DOSE_ATTEMPTS) {
