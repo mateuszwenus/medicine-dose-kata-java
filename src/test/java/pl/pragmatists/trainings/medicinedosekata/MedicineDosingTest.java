@@ -130,4 +130,16 @@ public class MedicineDosingTest {
 		// then
 		verify(medicinePump, times(3)).dose(Medicine.PRESSURE_RAISING_MEDICINE);
 	}
+
+	@Test
+	public void should_dose_medicine_only_after_30min_from_last_medicine() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MIN_NORMAL_PRESSURE - 1);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_RAISING_MEDICINE)).thenReturn(30);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		verify(medicinePump, never()).dose(Medicine.PRESSURE_RAISING_MEDICINE);
+	}
 }
