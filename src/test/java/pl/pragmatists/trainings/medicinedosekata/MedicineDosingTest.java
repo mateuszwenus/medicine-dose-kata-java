@@ -10,7 +10,9 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import pl.pragmatists.trainings.medicinedosekata.dependencies.AlertService;
@@ -146,5 +148,19 @@ public class MedicineDosingTest {
 		doseController.checkHealthAndApplyMedicine();
 		// then
 		verify(medicinePump, never()).dose(Medicine.PRESSURE_RAISING_MEDICINE);
+	}
+	
+	@Test
+	public void should_notify_doctor_and_then_dose_three_lowering_for_critically_low_pressure() {
+		// given
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(54);
+		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_RAISING_MEDICINE)).thenReturn(DoseController.MIN_MEDICINE_INTERVAL);
+		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
+		// when
+		doseController.checkHealthAndApplyMedicine();
+		// then
+		InOrder inOrder = Mockito.inOrder(alertService, medicinePump);
+		inOrder.verify(alertService).notifyDoctor();
+		inOrder.verify(medicinePump, times(3)).dose(Medicine.PRESSURE_RAISING_MEDICINE);
 	}
 }
