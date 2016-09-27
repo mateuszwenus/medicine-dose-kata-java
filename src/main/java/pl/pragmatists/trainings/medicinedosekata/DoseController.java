@@ -17,11 +17,12 @@ public class DoseController {
 
 	private final HealthMonitor healthMonitor;
 	private final MedicinePump medicinePump;
+	private final AlertService alertService;
 
 	public DoseController(HealthMonitor healthMonitor, MedicinePump medicinePump, AlertService alertService) {
 		this.healthMonitor = checkNotNull(healthMonitor, "healthMonitor");
 		this.medicinePump = checkNotNull(medicinePump, "medicinePump");
-		checkNotNull(alertService, "alertService");
+		this.alertService = checkNotNull(alertService, "alertService");
 	}
 
 	private <T> T checkNotNull(T obj, String variableName) {
@@ -33,7 +34,10 @@ public class DoseController {
 
 	public void checkHealthAndApplyMedicine() {
 		int pressure = healthMonitor.getSystolicBloodPressure();
-		if (isVeryLowPressure(pressure)) {
+		if (pressure < 55) {
+			alertService.notifyDoctor();
+			dose(Medicine.PRESSURE_RAISING_MEDICINE, 3);
+		} else if (isVeryLowPressure(pressure)) {
 			dose(Medicine.PRESSURE_RAISING_MEDICINE, 2);
 		} else if (isLowPressure(pressure)) {
 			dose(Medicine.PRESSURE_RAISING_MEDICINE, 1);
