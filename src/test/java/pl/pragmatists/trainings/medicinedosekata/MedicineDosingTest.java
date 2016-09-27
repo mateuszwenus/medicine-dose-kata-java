@@ -153,7 +153,7 @@ public class MedicineDosingTest {
 	@Test
 	public void should_notify_doctor_and_then_dose_three_lowering_for_critically_low_pressure() {
 		// given
-		when(healthMonitor.getSystolicBloodPressure()).thenReturn(54);
+		when(healthMonitor.getSystolicBloodPressure()).thenReturn(DoseController.MIN_VERY_LOW_PRESSURE - 1);
 		when(medicinePump.getTimeSinceLastDoseInMinutes(Medicine.PRESSURE_RAISING_MEDICINE)).thenReturn(DoseController.MIN_MEDICINE_INTERVAL);
 		DoseController doseController = new DoseController(healthMonitor, medicinePump, alertService);
 		// when

@@ -12,6 +12,7 @@ public class DoseController {
 	public static final int MIN_NORMAL_PRESSURE = 90;
 	public static final int MAX_NORMAL_PRESSURE = 150;
 	public static final int MIN_LOW_PRESSURE = 60;
+	public static final int MIN_VERY_LOW_PRESSURE = 55;
 	
 	private static final int MAX_DOSE_ATTEMPTS = 8;
 
@@ -34,7 +35,7 @@ public class DoseController {
 
 	public void checkHealthAndApplyMedicine() {
 		int pressure = healthMonitor.getSystolicBloodPressure();
-		if (pressure < 55) {
+		if (isCriticallyLowPressure(pressure)) {
 			alertService.notifyDoctor();
 			dose(Medicine.PRESSURE_RAISING_MEDICINE, 3);
 		} else if (isVeryLowPressure(pressure)) {
@@ -44,6 +45,10 @@ public class DoseController {
 		} else if (isHighPressure(pressure)) {
 			dose(Medicine.PRESSURE_LOWERING_MEDICINE, 1);
 		}
+	}
+
+	private boolean isCriticallyLowPressure(int pressure) {
+		return pressure < MIN_VERY_LOW_PRESSURE;
 	}
 
 	private boolean isHighPressure(int pressure) {
